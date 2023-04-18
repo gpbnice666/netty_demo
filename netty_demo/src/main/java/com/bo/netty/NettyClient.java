@@ -1,27 +1,30 @@
 package com.bo.netty;
 
 import com.bo.netty.handler.NettyClientHandler;
-import com.bo.netty.protobuf.UserPOJO;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.*;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
-import io.netty.util.CharsetUtil;
-
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * 1，使用Netty搭建一个服务器。
+ * 2，使用Netty搭建一个客户端。
+ * 3，客户端发送字符串，服务器端打印。
+ * 4，了解google的protobuf工具库。
+ * 6，客户端使用protobuf发送一个数据，包含两个字段：uid=10以内的随机，index=自增长整数。
+ * 7，服务器解析出这个数据包并打印内容。
+ * 8，客户端同时发送1000个包含上述两个字段的随机数据的数据包，服务器能成功接收并打印。
+ * 9，服务器使用线程池，可以并行的处理这1000条数据。
+ * 10，保证同一个UID的数据同时只占用一个线程。
  * @Author: gpb
  * @Date: 2023/4/18 11:54
  * @Description:
  */
 public class NettyClient {
-
-
 
     public static void main(String[] args) throws Exception {
         // 线程工作组

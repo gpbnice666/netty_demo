@@ -1,6 +1,5 @@
 package com.bo.netty.handler;
 
-import com.bo.netty.common.MessageProtocol;
 import com.bo.netty.protobuf.UserPOJO;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;

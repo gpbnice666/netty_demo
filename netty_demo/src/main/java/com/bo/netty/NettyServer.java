@@ -1,21 +1,16 @@
 package com.bo.netty;
 
-import com.bo.netty.common.MessageDecoder;
-import com.bo.netty.common.MessageEncoder;
 import com.bo.netty.handler.NettyServerHandler;
 import com.bo.netty.protobuf.UserPOJO;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.*;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.ChannelPipeline;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
-import io.netty.util.CharsetUtil;
-
-import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * @Author: gpb
@@ -23,7 +18,6 @@ import java.util.concurrent.Executors;
  * @Description:
  */
 public class NettyServer {
-
 
     public static void main(String[] args) {
         // 用于接收客户端连接的线程工作组

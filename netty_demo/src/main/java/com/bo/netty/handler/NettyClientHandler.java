@@ -2,14 +2,11 @@ package com.bo.netty.handler;
 
 import com.bo.netty.protobuf.UserPOJO;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.CharsetUtil;
 
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -36,15 +33,15 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
         ctx.writeAndFlush(user);
         super.channelActive(ctx);
 
-//        for (int i = 0; i < 1000; i++) {
-//            int uid = ThreadLocalRandom.current().nextInt(10);
-//            UserPOJO.user user = UserPOJO.user.newBuilder()
-//                    .setUid(uid)
-//                    .setIndex(i)
-//                    .build();
-//            ctx.writeAndFlush(user);
-//            channel.writeAndFlush(message);
-//        }
+   /*     for (int i = 0; i < 1000; i++) {
+            int uid = ThreadLocalRandom.current().nextInt(10);
+            UserPOJO.user user = UserPOJO.user.newBuilder()
+                    .setUid(uid)
+                    .setIndex(i)
+                    .build();
+            ctx.writeAndFlush(user);
+            super.channelActive(ctx);
+        }*/
 
     }
 
