@@ -1,6 +1,6 @@
 package com.bo.netty;
 
-import com.bo.netty.handler.NettyServerHandler;
+import com.bo.netty.handler.*;
 import com.bo.netty.protobuf.UserPOJO;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -27,11 +27,11 @@ public class NettyServer {
         try {
             // 服务端启动器
             ServerBootstrap serverBootstrap = new ServerBootstrap();
-            serverBootstrap.group(bossGroup,workerGroup) // 绑定两个工作线程组
+            serverBootstrap.group(bossGroup, workerGroup) // 绑定两个工作线程组
                     .channel(NioServerSocketChannel.class) // 设置NIO的模型
-                    .option(ChannelOption.SO_BACKLOG,1024) // 设置tcp缓冲区大小
+                    .option(ChannelOption.SO_BACKLOG, 1024) // 设置tcp缓冲区大小
                     .option(ChannelOption.SO_RCVBUF, 32 * 1024) // 设置发送数据的缓冲大小
-                    .childOption(ChannelOption.SO_KEEPALIVE,Boolean.TRUE)
+                    .childOption(ChannelOption.SO_KEEPALIVE, Boolean.TRUE)
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {
@@ -39,7 +39,11 @@ public class NettyServer {
                             ChannelPipeline pipeline = ch.pipeline();
                             // protobuf数据 设置编码格式
                             pipeline.addLast(new ProtobufDecoder(UserPOJO.user.getDefaultInstance()));
-                            pipeline.addLast(new NettyServerHandler());
+                            //pipeline.addLast(new NettyServerHandler());
+                            //  pipeline.addLast(new MyServerHandler());
+                            // pipeline.addLast(new NettyServerHandler_1());
+                          //  pipeline.addLast(new NettyServerHandler_2());
+                            pipeline.addLast(new NettyServerHandler_3());
                         }
                     });
 

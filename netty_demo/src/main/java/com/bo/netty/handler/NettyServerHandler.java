@@ -9,6 +9,7 @@ import io.netty.util.CharsetUtil;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @Author: gpb
@@ -19,9 +20,17 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<UserPOJO.use
 
 
     private final ConcurrentHashMap<Integer, ExecutorService> uidThreadMap = new ConcurrentHashMap<>();
+    private final ExecutorService executorService = Executors.newFixedThreadPool(10);
+
+
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, UserPOJO.user user)  {
+/*        executorService.execute(()->{
+            synchronized (user){
+
+            }
+        });*/
         int uid = user.getUid();
         ExecutorService executorService = uidThreadMap.computeIfAbsent(uid, k -> Executors.newSingleThreadExecutor());
         executorService.execute(() -> process(user));
@@ -30,8 +39,13 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<UserPOJO.use
 
 
     private void process(UserPOJO.user user) {
+        try {
+            Thread.sleep(ThreadLocalRandom.current().nextInt(1000));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
         // 处理数据
-        System.out.println(Thread.currentThread() + "正在执行：[" + user.getUid() + "] 用户的第[" + user.getIndex() + "]任务");
+        System.out.println(Thread.currentThread().getName() + "正在执行：[" + user.getUid() + "] 用户的第[" + user.getIndex() + "]任务");
     }
 
     /***
@@ -49,4 +63,37 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<UserPOJO.use
         // 出现异常就关闭
         ctx.close();
     }
+
+    //    protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
+//        if (msg instanceof ByteBuf) {
+//            ByteBuf buf = (ByteBuf) msg;
+//            // 解析字节数组
+//            int messageType = buf.readInt();
+//            byte[] data = new byte[buf.readableBytes()];
+//            buf.readBytes(data);
+//            IMessage message = ProtobufUtil.deserialize(messageType, data);
+//
+//            // 处理消息
+//            if (message instanceof MyMessage) {
+//                MyMessage myMessage = (MyMessage) message;
+//                // 加入任务队列
+//                executorService.submit(() -> {
+//                    // 处理消息，保证同一个UID的数据同时只占用一个线程
+//                    synchronized (uids) {
+//                        int uid = myMessage.getUid();
+//                        if (!uids.containsKey(uid)) {
+//                            uids.put(uid, new Object());
+//                        }
+//                        synchronized (uids.get(uid)) {
+//                            handleMyMessage(myMessage);
+//                        }
+//                    }
+//                });
+//            }
+//        }
+//    }
+//
+//    private void handleMyMessage(MyMessage message) {
+//        // 处理消息
+//    }
 }
