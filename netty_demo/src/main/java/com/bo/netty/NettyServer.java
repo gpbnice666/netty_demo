@@ -42,14 +42,16 @@ public class NettyServer {
                             //pipeline.addLast(new NettyServerHandler());
                             //  pipeline.addLast(new MyServerHandler());
                             // pipeline.addLast(new NettyServerHandler_1());
-                          //  pipeline.addLast(new NettyServerHandler_2());
-                            pipeline.addLast(new NettyServerHandler_3());
+                            //  pipeline.addLast(new NettyServerHandler_2());
+                            // pipeline.addLast(new NettyServerHandler_3());
+                            pipeline.addLast(new NettyServerHandler_6());
                         }
                     });
 
             System.out.println("服务器启动，端口：9090");
             // 绑定端口启动
             ChannelFuture sync = serverBootstrap.bind(9090).sync();
+            NettyServerHandler_6.runConsumer();
             // 释放
             sync.channel().closeFuture().sync();
         } catch (InterruptedException e) {
